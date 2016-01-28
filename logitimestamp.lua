@@ -1,7 +1,7 @@
 function OnEvent(event, arg)
+	dbg = false
 	OutputLogMessage("date = %s, event = %s, arg = %s\n", GetDate("%Y-%m-%d-%H%M%S"), event, arg)
 	lool = ""
---	police = 0
 	if (event == "G_PRESSED") then
 		if (GetMKeyState()==1) then
 			if (arg == 14) then
@@ -12,19 +12,6 @@ function OnEvent(event, arg)
 			end
 		end
 		if (GetMKeyState()==2) then
-			-- if (arg == 10) then
-				-- police = 1
-				-- while (police == 1) do
-					-- dutyInterval = 1000
-					-- if ((GetRunningTime()%dutyInterval)<(dutyInterval/2)) then
-						-- SetBacklightColor(255, 0, 0, kb)
-						-- SetBacklightColor(0, 0, 255, lhc)
-						-- else
-						-- SetBacklightColor(0, 0, 255, kb)
-						-- SetBacklightColor(255, 0, 0, lhc)
-					-- end
-				-- end
-			-- end
 			if (arg == 13) then
 				lool = GetDate("!%m/%d/%Y %H:%M:%S<")
 			end
@@ -39,39 +26,54 @@ function OnEvent(event, arg)
 			end
 		end
 	end
-	-- if event == "G_RELEASED" and GetMKeyState() == 2 and arg == 10 then
-		-- police = 0
-	-- end
-	if (lool != "") then
+	if (lool ~= "") then
+		if dbg then OutputLogMessage("\n") end
+		if dbg then OutputLogMessage("starting gsub\n") end
+		if dbg then OutputLogMessage("\n") end
 		lool:gsub(".", function(c)
-				shft = 0
-				if c == "-" then
-					c = "minus"
-				end
-				if c == "." then
-					c = "period"
-				end
-				if c == " " then
-					c = "spacebar"
-				end
-				if c == ":" then
-					c = "semicolon"
-					shft = 1
-				end
-				if c == ">" then
-					c = "tab"
-				end
-				if c == "<" then
-					c = "enter"
-				end
-				if (shft == 1) then
-					PressKey("shift")
-					PressAndReleaseKey( c )
-					ReleaseKey("shift")
-					else
-					PressAndReleaseKey( c )
-				end
+			if dbg then OutputLogMessage("\n") end
+			if dbg then OutputLogMessage("iterating gsub: %s\n", c) end
+			if dbg then OutputLogMessage("\n") end
+			shft = 0
+			if c == "-" then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "minus"
 			end
+			if c == "." then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "period"
+			end
+			if c == " " then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "spacebar"
+			end
+			if c == ":" then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "semicolon"
+				shft = 1
+			end
+			if c == ">" then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "tab"
+			end
+			if c == "<" then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "enter"
+			end
+			if c == "/" then
+				if dbg then OutputLogMessage("%s found\n",c) end
+				c = "slash"
+			end
+			if (shft == 1) then
+				if dbg then OutputLogMessage("pressing shift\n") end
+				PressKey("rshift")
+				PressAndReleaseKey( c )
+				ReleaseKey("rshift")
+				else
+				if dbg then OutputLogMessage("no shift\n") end
+				PressAndReleaseKey( c )
+			end
+		end
 		)
 	end
 end
